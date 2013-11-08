@@ -2,8 +2,8 @@ clc
 clf
 speed = 5;
 
-location = [10 1]; %input('Enter the starting location([num1,num2]): ');
-destination = [ 1 20];%input('Enter the final location([num1,num2]): ');
+location = input('Enter the starting location([num1,num2]): ');
+destination = input('Enter the final location([num1,num2]): ');
 
 delta = (destination-location).*(speed/cart_distance(destination,location));
 
