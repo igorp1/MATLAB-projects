@@ -1,7 +1,9 @@
 Yakhot simulator 
+==========================
 
 ![alt tag](http://www.bu.edu/me/files/images/people/yakhot.jpg)
-==========================
+
+======================================================
 
 Current version is 2.1 
 
