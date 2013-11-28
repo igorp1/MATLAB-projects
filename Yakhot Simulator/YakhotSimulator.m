@@ -751,7 +751,7 @@ Restart_button = uicontrol('style','pushbutton',...
             end
             
             for i = 1:membersNum
-                membersName{i} = sprintf('joint #%c',i+64);
+                membersName{i} = sprintf('member #%c',i+64);
             end
             
             delete(fS)
