@@ -45,3 +45,10 @@ Yakhot simulator
 
 
 
+<<<<<<< HEAD
+=======
+Upcoming feature on 3.0 : Multiple colors!
+![alt tag](https://raw.github.com/igorp1/MATLAB-projects/master/Yakhot%20Simulator/UpcomingFeature.png)
+
+~Igor dePaula
+>>>>>>> a45be8eae5c9f9197fe71f3958dee39dfb77f3ce
