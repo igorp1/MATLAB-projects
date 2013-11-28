@@ -444,9 +444,13 @@ Restart_button = uicontrol('style','pushbutton',...
             %get the forces again:
             %loadfile
             L(L~=0) = 5*inc;
-
-            T = inv(A)*(-L');
             
+            try
+            T = inv(A)*(-L');
+            catch
+                warndlg('Your Truss design is not valid for this simulator')
+                return
+            end
             T = -T;
             
             %%%%%%%%%%%%%%%%Simulation%%%%%%%%%%%%%%%%%
