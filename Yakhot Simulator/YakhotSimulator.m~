@@ -228,7 +228,7 @@ Restart_button = uicontrol('style','pushbutton',...
         
         distances = repmat(lengthStraw,2,1);
         
-        lengthStraw = sum(lengthStraw)/2;
+        lengthStraw = sum(lengthStraw
         
         M = M./distances;
         
@@ -467,7 +467,7 @@ Restart_button = uicontrol('style','pushbutton',...
             
 %             lengthStraw = sum(lengthStraw)/2;
             
-            Fb = 402.043./lengthStraw.^1.435;
+            Fb = 402.043./(sum(lengthStraw)/2).^1.435;
             
             willbreak = T4loads./Fb';
            
@@ -510,7 +510,7 @@ Restart_button = uicontrol('style','pushbutton',...
         
         state(cmpindx) = 'C';
         state(tenindx) = 'T';
-        state(state == 0) = '-';
+        state(state == 0) = 'Ø';
         state = char(state);
         
         
