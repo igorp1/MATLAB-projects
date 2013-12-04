@@ -375,7 +375,7 @@ Restart_button = uicontrol('style','pushbutton',...
         
         %print L
         L = get(Loads,'data');
-        L = reshape(L,numel(L),1);
+        L = reshape(L,1,numel(L));
         fprintf(fid,'L = [');
         for i = 1:length(L)
             fprintf(fid,' %d ',L(i));
@@ -430,7 +430,7 @@ Restart_button = uicontrol('style','pushbutton',...
         %% Setup A
         
         if isempty(done) || done==false
-        setA();
+            setA();
         end
         
         %% Start the simulation:
@@ -448,8 +448,8 @@ Restart_button = uicontrol('style','pushbutton',...
             L(L~=0) = 5*inc;
             
             try
-            T = inv(A)*(-L');
-            catch
+                T = inv(A)*(-L');
+            catch e
                 warndlg('Your Truss design is not valid for this simulator')
                 return
             end
