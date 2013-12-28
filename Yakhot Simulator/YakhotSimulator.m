@@ -467,10 +467,13 @@ Restart_button = uicontrol('style','pushbutton',...
             
 %             lengthStraw = sum(lengthStraw)/2;
             
-            Fb = 402.043./lengthStraw.^1.435;
+            Fb = 402.043./lengthStraw.^1.435;% bucking strength
+            
+            
+%             for real value use:
+%             Fb = Fb.*(lengthStraw)./(lengthStraw-0.5);
             
             willbreak = T4loads./Fb';
-           
             
             indx = find(max(willbreak)==willbreak);
             
@@ -484,7 +487,7 @@ Restart_button = uicontrol('style','pushbutton',...
             xlabel('load')
             
             
-            pause(0.01);
+            pause(0.001);
             inc = inc + 0.01;
             
         end
@@ -558,6 +561,19 @@ Restart_button = uicontrol('style','pushbutton',...
         
         fprintf(fid,'The maximum load uncertainty is %.2f\n',(max(L).*U(indx)./Fb(indx)));
         
+        
+        %%return the length of all straws
+%         fprintf('\nTo get the lengths of all straws: \n');
+%         
+%         
+%         for i = 1:length(lengthStraw)
+%             fprintf(fid,'m%d: %4.d\n',i ,lengthStraw(i));
+%         end
+%         
+%         %%RAW data
+%         for i = 1:length(lengthStraw)
+%             fprintf(fid,'%4.d\n', lengthStraw(i));
+%         end
         
         fclose all;
         
