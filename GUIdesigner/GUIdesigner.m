@@ -1,6 +1,6 @@
 %{
 
-    GUI designer v 1.0.0
+    GUI designer v 1.2.0
 
     by Igor dePaula
 
@@ -11,9 +11,10 @@
 
 function GUIdesigner()
 
-global file;     %tells you to which file everything is been saved
-global callbacks;
-callbacks =0;
+
+global file;      %tells you to which file everything is been saved
+global callbacks; %tells you how man callbacks are in the file
+callbacks = 0;
 
 
 %%Promp user for project name
@@ -21,21 +22,18 @@ callbacks =0;
 if ispc()
     file = 'myGUI.m';
 else
-    [fileName,path] = uiputfile('myGUI.m','Choose where you want to save your GUI');
-    
+        [fileName,path] = uiputfile('myGUI.m','Choose where you want to save your GUI');
+        
+    if str2num(fileName) == 0 
+        return
+    end
     file = fileName;
     
 end
 
 
 
-
-
-
-
-
-
-%% open file:
+%% open file and save info to header:
 if ispc()
     [~,user] = system('echo %username%');
 else
@@ -62,6 +60,9 @@ fprintf(fid,'                ''position'',[0 0 1 1]);\n\n\n');
 
 
 fclose(fid);
+
+
+
 %% object properties:
 global object %tells you what kind of object is been placed on the panel
 
@@ -87,20 +88,22 @@ global object %tells you what kind of object is been placed on the panel
 
 %% Define Colors:
 
-axes_color =   [220 220 220]/255;  %LIGHT GREY
+axes_color =   [220 220 220]/255;    %LIGHT GRAY
 push_color =   [150 250   0]/255;    %GREEN
 slider_color = [255 230   0]/255;    %YELLOW
 edit_color =   [120  70 200]/255;    %PURPLE
-text_color =   [250  80   0]/255;     %ORANGE
-panel_color =  [ 50  40 255]/255;     %BLUE
-menu_color =   [200   0   0]/255;      %RED
+text_color =   [250  80   0]/255;    %ORANGE
+panel_color =  [ 50  40 255]/255;    %BLUE
+menu_color =   [200   0   0]/255;    %RED
 
 
 %% GUI setup:
 
-f_main = figure('color', 'white',...
-    'units','normalized',...
-    'position',[0.025 0.05 0.95 0.9],...
+f_main = figure('Color', [1 1 1],...
+    'Units','Normalized',...
+    'NumberTitle','off',...
+    'Name','GUI Designer',...
+    'Position',[0.025 0.05 0.95 0.9],...
     'CloseRequestFcn',@closeMe);
 
 %% Drawing area:
@@ -197,8 +200,7 @@ menu_new = uicontrol('style','pushbutton',...
         switch source.String(5:end);
             
             case 'Axes'
-                disp('Axes')
-                %ask for labels, title, x and y ranges
+                %disp('Axes')
                 getPropertyAxes();
                 uiwait;
                 [X_origin, Y_origin] = ginput(1);
@@ -209,7 +211,7 @@ menu_new = uicontrol('style','pushbutton',...
                 [X_end, Y_end] = ginput(1);
                 patch([X_origin X_end X_end X_origin],[Y_origin Y_origin Y_end Y_end],axes_color);
                 
-                if X_end < X_origin 
+                if X_end < X_origin
                     object.frame.origin.X = X_end/100;
                 else
                     object.frame.origin.X = X_origin/100;
@@ -217,18 +219,16 @@ menu_new = uicontrol('style','pushbutton',...
                 if Y_end < Y_origin
                     object.frame.origin.Y = Y_end/100;
                 else
-                   object.frame.origin.Y = Y_origin/100;
+                    object.frame.origin.Y = Y_origin/100;
                 end
-                    
-                    
+                
+                
                 object.frame.size.width = abs(X_end - X_origin)/100;
                 object.frame.size.height = abs(Y_end - Y_origin)/100;
                 write2file(object);
                 
             case 'Button'
-                disp('Button')
-                %ask for backgorundcolor, foregroundcolor, string,
-                %callback name, fontsize, fontweight
+                %disp('Button')
                 getPropertypush();
                 uiwait;
                 [X_origin, Y_origin] = ginput(1);
@@ -239,7 +239,7 @@ menu_new = uicontrol('style','pushbutton',...
                 [X_end, Y_end] = ginput(1);
                 patch([X_origin X_end X_end X_origin],[Y_origin Y_origin Y_end Y_end],push_color);
                 
-                if X_end < X_origin 
+                if X_end < X_origin
                     object.frame.origin.X = X_end/100;
                 else
                     object.frame.origin.X = X_origin/100;
@@ -247,17 +247,16 @@ menu_new = uicontrol('style','pushbutton',...
                 if Y_end < Y_origin
                     object.frame.origin.Y = Y_end/100;
                 else
-                   object.frame.origin.Y = Y_origin/100;
+                    object.frame.origin.Y = Y_origin/100;
                 end
-                    
-                    
+                
+                
                 object.frame.size.width = abs(X_end - X_origin)/100;
                 object.frame.size.height = abs(Y_end - Y_origin)/100;
                 write2file(object);
                 
             case 'Slider'
-                disp('Slider')
-                %ask for range and origin
+                %disp('Slider')
                 getPropertyslider();
                 uiwait;
                 [X_origin, Y_origin] = ginput(1);
@@ -268,7 +267,7 @@ menu_new = uicontrol('style','pushbutton',...
                 [X_end, Y_end] = ginput(1);
                 patch([X_origin X_end X_end X_origin],[Y_origin Y_origin Y_end Y_end],slider_color);
                 
-                if X_end < X_origin 
+                if X_end < X_origin
                     object.frame.origin.X = X_end/100;
                 else
                     object.frame.origin.X = X_origin/100;
@@ -276,18 +275,16 @@ menu_new = uicontrol('style','pushbutton',...
                 if Y_end < Y_origin
                     object.frame.origin.Y = Y_end/100;
                 else
-                   object.frame.origin.Y = Y_origin/100;
+                    object.frame.origin.Y = Y_origin/100;
                 end
-                    
-                    
+                
+                
                 object.frame.size.width = abs(X_end - X_origin)/100;
                 object.frame.size.height = abs(Y_end - Y_origin)/100;
                 write2file(object);
                 
             case 'Editable Textbox'
-                disp('Editable Textbox')
-                %ask for backgorundcolor, foregroundcolor, string,
-                %callback name, fontsize, fontweight
+                %disp('Editable Textbox')
                 getPropertyEdit();
                 uiwait;
                 [X_origin, Y_origin] = ginput(1);
@@ -298,7 +295,7 @@ menu_new = uicontrol('style','pushbutton',...
                 [X_end, Y_end] = ginput(1);
                 patch([X_origin X_end X_end X_origin],[Y_origin Y_origin Y_end Y_end],edit_color);
                 
-                if X_end < X_origin 
+                if X_end < X_origin
                     object.frame.origin.X = X_end/100;
                 else
                     object.frame.origin.X = X_origin/100;
@@ -306,19 +303,17 @@ menu_new = uicontrol('style','pushbutton',...
                 if Y_end < Y_origin
                     object.frame.origin.Y = Y_end/100;
                 else
-                   object.frame.origin.Y = Y_origin/100;
+                    object.frame.origin.Y = Y_origin/100;
                 end
-                    
-                    
+                
+                
                 object.frame.size.width = abs(X_end - X_origin)/100;
                 object.frame.size.height = abs(Y_end - Y_origin)/100;
                 write2file(object);
                 
                 
             case 'Textbox'
-                disp('Textbox')
-                %ask for backgorundcolor, foregroundcolor, string,
-                %fontsize, fontweight
+                %disp('Textbox')
                 getPropertyText();
                 uiwait;
                 [X_origin, Y_origin] = ginput(1);
@@ -329,7 +324,7 @@ menu_new = uicontrol('style','pushbutton',...
                 [X_end, Y_end] = ginput(1);
                 patch([X_origin X_end X_end X_origin],[Y_origin Y_origin Y_end Y_end],text_color);
                 
-                if X_end < X_origin 
+                if X_end < X_origin
                     object.frame.origin.X = X_end/100;
                 else
                     object.frame.origin.X = X_origin/100;
@@ -337,18 +332,17 @@ menu_new = uicontrol('style','pushbutton',...
                 if Y_end < Y_origin
                     object.frame.origin.Y = Y_end/100;
                 else
-                   object.frame.origin.Y = Y_origin/100;
+                    object.frame.origin.Y = Y_origin/100;
                 end
-                    
-                    
+                
+                
                 object.frame.size.width = abs(X_end - X_origin)/100;
                 object.frame.size.height = abs(Y_end - Y_origin)/100;
                 write2file(object);
                 
                 
             case 'Panel'
-                disp('Panel')
-                %ask for backgorundcolor, foregroundcolor
+                %disp('Panel')
                 getPropertyPanel();
                 uiwait;
                 [X_origin, Y_origin] = ginput(1);
@@ -359,7 +353,7 @@ menu_new = uicontrol('style','pushbutton',...
                 [X_end, Y_end] = ginput(1);
                 patch([X_origin X_end X_end X_origin],[Y_origin Y_origin Y_end Y_end],panel_color);
                 
-                if X_end < X_origin 
+                if X_end < X_origin
                     object.frame.origin.X = X_end/100;
                 else
                     object.frame.origin.X = X_origin/100;
@@ -367,17 +361,15 @@ menu_new = uicontrol('style','pushbutton',...
                 if Y_end < Y_origin
                     object.frame.origin.Y = Y_end/100;
                 else
-                   object.frame.origin.Y = Y_origin/100;
+                    object.frame.origin.Y = Y_origin/100;
                 end
-                    
-                    
+                
                 object.frame.size.width = abs(X_end - X_origin)/100;
                 object.frame.size.height = abs(Y_end - Y_origin)/100;
                 write2file(object);
                 
             case 'Menu'
-                disp('Menu')
-                %strings (options on menu)
+                %disp('Menu')
                 getPropertyMenu();
                 uiwait;
                 [X_origin, Y_origin] = ginput(1);
@@ -388,7 +380,7 @@ menu_new = uicontrol('style','pushbutton',...
                 [X_end, Y_end] = ginput(1);
                 patch([X_origin X_end X_end X_origin],[Y_origin Y_origin Y_end Y_end],menu_color);
                 
-                if X_end < X_origin 
+                if X_end < X_origin
                     object.frame.origin.X = X_end/100;
                 else
                     object.frame.origin.X = X_origin/100;
@@ -396,10 +388,9 @@ menu_new = uicontrol('style','pushbutton',...
                 if Y_end < Y_origin
                     object.frame.origin.Y = Y_end/100;
                 else
-                   object.frame.origin.Y = Y_origin/100;
+                    object.frame.origin.Y = Y_origin/100;
                 end
-                    
-                    
+                
                 object.frame.size.width = abs(X_end - X_origin)/100;
                 object.frame.size.height = abs(Y_end - Y_origin)/100;
                 write2file(object);
@@ -415,8 +406,11 @@ menu_new = uicontrol('style','pushbutton',...
         object.style = 'axes';
         
         f_sub = figure('units','normalized',...
+            'NumberTitle','off',...
+            'Name','Axes setup',...
             'position',[0.4 0.4 0.2 .3],...
-            'color','w');
+            'color','w',...
+            'CloseRequestFcn',@saveProperties);
         
         handle_edit = uicontrol('style','edit',...
             'units','normalized',...
@@ -502,7 +496,10 @@ menu_new = uicontrol('style','pushbutton',...
         object.style = 'popupmenu';
         
         f_sub = figure('units','normalized',...
-            'position',[0.4 0.3 0.2 .5]);
+            'NumberTitle','off',...
+            'Name','Menu setup',...
+            'position',[0.4 0.3 0.2 .5],...
+            'CloseRequestFcn',@saveProperties);
         
         handle_edit = uicontrol('style','edit',...
             'units','normalized',...
@@ -574,260 +571,266 @@ menu_new = uicontrol('style','pushbutton',...
             
             delete(f_sub);
         end
-         
+        
         
     end    %DONE
 %%%%%%%%%%%%%
     function getPropertyPanel(~,~)
         object.style = 'uipanel';
-
-f_sub = figure('units','normalized',...
-    'position',[0.4 0.3 0.2 .5]);
-
-handle_edit = uicontrol('style','edit',...
-    'units','normalized',...
-    'position',[0.005 0.9 0.995 0.05]);
-handle_text =  uicontrol('style','text',...
-    'units','normalized',...
-    'position',[0.005 0.95 0.995 0.05],...
-    'string','Handle Name:');
-
-Color_text =  uicontrol('style','text',...
-    'units','normalized',...
-    'position',[0.005 0.85 0.995 0.05],...
-    'string','Color:');
-
-r_text = uicontrol('style','text',...
-    'units','normalized',...
-    'position',[0.00 0.75 .33 .05],...
-    'string','R');
-
-g_text = uicontrol('style','text',...
-    'units','normalized',...
-    'position',[0.33 0.75 .33 .05],...
-    'string','G');
-
-b_text = uicontrol('style','text',...
-    'units','normalized',...
-    'position',[0.66 0.75 .33 .05],...
-    'string','B');
-
-r_edit = uicontrol('style','edit',...
-    'units','normalized',...
-    'position',[0.00 0.7 .33 .05],...
-    'callback',@chooseColor);
-
-g_edit = uicontrol('style','edit',...
-    'units','normalized',...
-    'position',[0.33 0.7 .33 .05],...
-    'callback',@chooseColor);
-
-b_edit = uicontrol('style','edit',...
-    'units','normalized',...
-    'position',[0.66 0.7 .33 .05],...
-    'callback',@chooseColor);
-
-p_COLOR = uipanel('units','normalized',...
-                    'position',[0.05 0.1 0.905 .5]);
-                
-pushIt = uicontrol('style','pushbutton',...
-                    'units','normalized',...
-                    'position',[0.25 0.0 0.5 0.1],...
-                    'string','Enter properties',...
-                    'callback',@saveProperties);
-
-    function saveProperties(~,~)
         
-        object.handle = get(handle_edit,'string');
+        f_sub = figure('units','normalized',...
+            'NumberTitle','off',...
+            'Name','Panel setup',...
+            'position',[0.4 0.3 0.2 .5],...
+            'CloseRequestFcn',@saveProperties);
         
-        R = str2num(get(r_edit,'string'))/255;
-        G = str2num(get(g_edit,'string'))/255;
-        B = str2num(get(b_edit,'string'))/255;
+        handle_edit = uicontrol('style','edit',...
+            'units','normalized',...
+            'position',[0.005 0.9 0.995 0.05]);
+        handle_text =  uicontrol('style','text',...
+            'units','normalized',...
+            'position',[0.005 0.95 0.995 0.05],...
+            'string','Handle Name:');
         
-        if isempty(R) || R>255
-            R=0;
+        Color_text =  uicontrol('style','text',...
+            'units','normalized',...
+            'position',[0.005 0.85 0.995 0.05],...
+            'string','Color:');
+        
+        r_text = uicontrol('style','text',...
+            'units','normalized',...
+            'position',[0.00 0.75 .33 .05],...
+            'string','R');
+        
+        g_text = uicontrol('style','text',...
+            'units','normalized',...
+            'position',[0.33 0.75 .33 .05],...
+            'string','G');
+        
+        b_text = uicontrol('style','text',...
+            'units','normalized',...
+            'position',[0.66 0.75 .33 .05],...
+            'string','B');
+        
+        r_edit = uicontrol('style','edit',...
+            'units','normalized',...
+            'position',[0.00 0.7 .33 .05],...
+            'callback',@chooseColor);
+        
+        g_edit = uicontrol('style','edit',...
+            'units','normalized',...
+            'position',[0.33 0.7 .33 .05],...
+            'callback',@chooseColor);
+        
+        b_edit = uicontrol('style','edit',...
+            'units','normalized',...
+            'position',[0.66 0.7 .33 .05],...
+            'callback',@chooseColor);
+        
+        p_COLOR = uipanel('units','normalized',...
+            'position',[0.05 0.1 0.905 .5]);
+        
+        pushIt = uicontrol('style','pushbutton',...
+            'units','normalized',...
+            'position',[0.25 0.0 0.5 0.1],...
+            'string','Enter properties',...
+            'callback',@saveProperties);
+        
+        function saveProperties(~,~)
+            
+            object.handle = get(handle_edit,'string');
+            
+            R = str2num(get(r_edit,'string'))/255;
+            G = str2num(get(g_edit,'string'))/255;
+            B = str2num(get(b_edit,'string'))/255;
+            
+            if isempty(R) || R>255
+                R=0;
+            end
+            
+            if isempty(G) || G>255
+                G=0;
+            end
+            
+            if isempty(B) || B>255
+                B=0;
+            end
+            
+            
+            object.color = [R G B];
+            
+            delete(f_sub);
         end
         
-        if isempty(G) || G>255
-            G=0;
+        function chooseColor(~,~)
+            
+            R = str2num(get(r_edit,'string'))/255;
+            G = str2num(get(g_edit,'string'))/255;
+            B = str2num(get(b_edit,'string'))/255;
+            
+            if isempty(R) || R>1
+                set(r_edit,'string','0');
+                R=0;
+            end
+            
+            if isempty(G) || G>1
+                set(g_edit,'string','0');
+                G=0;
+            end
+            
+            if isempty(B) || B>1
+                set(b_edit,'string','0');
+                B=0;
+            end
+            
+            set(p_COLOR,'backgroundcolor',[R G B]);
+            
+            
         end
         
-        if isempty(B) || B>255
-            B=0;
-        end
         
         
-        object.color = [R G B];
-        
-        delete(f_sub);
-    end
-
-    function chooseColor(~,~)
-        
-        R = str2num(get(r_edit,'string'))/255;
-        G = str2num(get(g_edit,'string'))/255;
-        B = str2num(get(b_edit,'string'))/255;
-        
-        if isempty(R) || R>1
-            set(r_edit,'string','0');
-            R=0;
-        end
-        
-        if isempty(G) || G>1
-            set(g_edit,'string','0');
-            G=0;
-        end
-        
-        if isempty(B) || B>1
-            set(b_edit,'string','0');
-            B=0;
-        end
-        
-        set(p_COLOR,'backgroundcolor',[R G B]);
-        
-        
-    end
-
-
-
     end   %DONE
 %%%%%%%%%%%%%
     function getPropertypush(~,~)
-
-object.style = 'pushbutton';
-
-f_sub = figure('units','normalized',...
-    'position',[0.4 0.4 0.2 .3],...
-    'color','w');
-
-handle_edit = uicontrol('style','edit',...
-    'units','normalized',...
-    'position',[0.005 0.85 0.995 0.1]);
-handle_text =  uicontrol('style','text',...
-    'units','normalized',...
-    'position',[0.005 0.95 0.995 0.05],...
-    'string','Handle Name:');
-
-string_edit = uicontrol('style','edit',...
-    'units','normalized',...
-    'position',[0.005 0.70 0.995 0.1]);
-string_text =  uicontrol('style','text',...
-    'units','normalized',...
-    'position',[0.005 0.80 0.995 0.05],...
-    'string','String:');
-
-call_edit = uicontrol('style','edit',...
-    'units','normalized',...
-    'position',[0.005 0.55 0.995 0.1]);
-call_text =  uicontrol('style','text',...
-    'units','normalized',...
-    'position',[0.005 0.65 0.995 0.05],...
-    'string','CallBack Function:');
-
-
-Color_text =  uicontrol('style','text',...
-    'units','normalized',...
-    'position',[0.005 0.48 0.995 0.05],...
-    'string','Color:');
-
-r_text = uicontrol('style','text',...
-    'units','normalized',...
-    'position',[0.00 0.43 .33 .05],...
-    'string','R');
-
-g_text = uicontrol('style','text',...
-    'units','normalized',...
-    'position',[0.33 0.43 .33 .05],...
-    'string','G');
-
-b_text = uicontrol('style','text',...
-    'units','normalized',...
-    'position',[0.66 0.43 .33 .05],...
-    'string','B');
-
-r_edit = uicontrol('style','edit',...
-    'units','normalized',...
-    'position',[0.00 0.33 .33 .1],...
-    'callback',@chooseColor);
-
-g_edit = uicontrol('style','edit',...
-    'units','normalized',...
-    'position',[0.33 0.33 .33 .1],...
-    'callback',@chooseColor);
-
-b_edit = uicontrol('style','edit',...
-    'units','normalized',...
-    'position',[0.66 0.33 .33 .1],...
-    'callback',@chooseColor);
-
-p_COLOR = uipanel('units','normalized',...
-    'position',[0.05 0.13 0.905 .2]);
-
-
-
-
-pushIt = uicontrol('style','pushbutton',...
-    'units','normalized',...
-    'position',[0.25 0.0 0.5 0.1],...
-    'string','Enter properties',...
-    'callback',@saveProperties);
-
-
-    function chooseColor(~,~)
         
-        R = str2num(get(r_edit,'string'))/255;
-        G = str2num(get(g_edit,'string'))/255;
-        B = str2num(get(b_edit,'string'))/255;
+        object.style = 'pushbutton';
         
-        if isempty(R) || R>255
-            set(r_edit,'string','0');
-            R=0;
-        end
+        f_sub = figure('units','normalized',...
+            'NumberTitle','off',...
+            'Name','Button Setup',...
+            'position',[0.4 0.4 0.2 .3],...
+            'color','w',...
+            'CloseRequestFcn',@saveProperties);
         
-        if isempty(G) || G>255
-            set(g_edit,'string','0');
-            G=0;
-        end
+        handle_edit = uicontrol('style','edit',...
+            'units','normalized',...
+            'position',[0.005 0.85 0.995 0.1]);
+        handle_text =  uicontrol('style','text',...
+            'units','normalized',...
+            'position',[0.005 0.95 0.995 0.05],...
+            'string','Handle Name:');
         
-        if isempty(B) || B>255
-            set(b_edit,'string','0');
-            B=0;
-        end
+        string_edit = uicontrol('style','edit',...
+            'units','normalized',...
+            'position',[0.005 0.70 0.995 0.1]);
+        string_text =  uicontrol('style','text',...
+            'units','normalized',...
+            'position',[0.005 0.80 0.995 0.05],...
+            'string','String:');
         
-        set(p_COLOR,'backgroundcolor',[R G B]);
+        call_edit = uicontrol('style','edit',...
+            'units','normalized',...
+            'position',[0.005 0.55 0.995 0.1]);
+        call_text =  uicontrol('style','text',...
+            'units','normalized',...
+            'position',[0.005 0.65 0.995 0.05],...
+            'string','CallBack Function:');
         
         
-    end
-
-
-    function saveProperties(~,~)
+        Color_text =  uicontrol('style','text',...
+            'units','normalized',...
+            'position',[0.005 0.48 0.995 0.05],...
+            'string','Color:');
         
-        object.handle = get(handle_edit,'string');
-        object.string = get(string_edit,'string');
-        object.fnc = get(call_edit,'string');
-        R = str2num(get(r_edit,'string'))/255;
-        G = str2num(get(g_edit,'string'))/255;
-        B = str2num(get(b_edit,'string'))/255;
+        r_text = uicontrol('style','text',...
+            'units','normalized',...
+            'position',[0.00 0.43 .33 .05],...
+            'string','R');
         
-        if isempty(R) || R>255
-            R=0;
-        end
+        g_text = uicontrol('style','text',...
+            'units','normalized',...
+            'position',[0.33 0.43 .33 .05],...
+            'string','G');
         
-        if isempty(G) || G>255
-            G=0;
-        end
+        b_text = uicontrol('style','text',...
+            'units','normalized',...
+            'position',[0.66 0.43 .33 .05],...
+            'string','B');
         
-        if isempty(B) || B>255
-            B=0;
+        r_edit = uicontrol('style','edit',...
+            'units','normalized',...
+            'position',[0.00 0.33 .33 .1],...
+            'callback',@chooseColor);
+        
+        g_edit = uicontrol('style','edit',...
+            'units','normalized',...
+            'position',[0.33 0.33 .33 .1],...
+            'callback',@chooseColor);
+        
+        b_edit = uicontrol('style','edit',...
+            'units','normalized',...
+            'position',[0.66 0.33 .33 .1],...
+            'callback',@chooseColor);
+        
+        p_COLOR = uipanel('units','normalized',...
+            'position',[0.05 0.13 0.905 .2]);
+        
+        
+        
+        
+        pushIt = uicontrol('style','pushbutton',...
+            'units','normalized',...
+            'position',[0.25 0.0 0.5 0.1],...
+            'string','Enter properties',...
+            'callback',@saveProperties);
+        
+        
+        function chooseColor(~,~)
+            
+            R = str2num(get(r_edit,'string'))/255;
+            G = str2num(get(g_edit,'string'))/255;
+            B = str2num(get(b_edit,'string'))/255;
+            
+            if isempty(R) || R>255
+                set(r_edit,'string','0');
+                R=0;
+            end
+            
+            if isempty(G) || G>255
+                set(g_edit,'string','0');
+                G=0;
+            end
+            
+            if isempty(B) || B>255
+                set(b_edit,'string','0');
+                B=0;
+            end
+            
+            set(p_COLOR,'backgroundcolor',[R G B]);
+            
+            
         end
         
         
-        object.color = [R G B];
-        delete(f_sub);
+        function saveProperties(~,~)
+            
+            object.handle = get(handle_edit,'string');
+            object.string = get(string_edit,'string');
+            object.fnc = get(call_edit,'string');
+            R = str2num(get(r_edit,'string'))/255;
+            G = str2num(get(g_edit,'string'))/255;
+            B = str2num(get(b_edit,'string'))/255;
+            
+            if isempty(R) || R>255
+                R=0;
+            end
+            
+            if isempty(G) || G>255
+                G=0;
+            end
+            
+            if isempty(B) || B>255
+                B=0;
+            end
+            
+            
+            object.color = [R G B];
+            delete(f_sub);
+            
+        end
         
-    end
-
-
+        
     end    %DONE
 %%%%%%%%%%%%%
     function getPropertyslider(~,~)
@@ -835,8 +838,11 @@ pushIt = uicontrol('style','pushbutton',...
         object.style = 'slider';
         
         f_sub = figure('units','normalized',...
+            'NumberTitle','off',...
+            'Name','Slider setup',...
             'position',[0.4 0.4 0.2 .3],...
-            'color','w');
+            'color','w',...
+            'CloseRequestFcn',@saveProperties);
         
         handle_edit = uicontrol('style','edit',...
             'units','normalized',...
@@ -889,20 +895,20 @@ pushIt = uicontrol('style','pushbutton',...
                 if M < m
                     object.min = M;
                     object.max = m;
-                        if val <= m && val >= M
-                            object.value = val;
-                        else
-                            object.value = M;
-                        end
+                    if val <= m && val >= M
+                        object.value = val;
+                    else
+                        object.value = M;
+                    end
                 else
                     object.min = m;
                     object.max = M;
-                        if val <= M && val >= m
-                            object.value = val;
-                        else
-                            object.value = m;
-                        end
-                            
+                    if val <= M && val >= m
+                        object.value = val;
+                    else
+                        object.value = m;
+                    end
+                    
                 end
                 
             else
@@ -913,7 +919,7 @@ pushIt = uicontrol('style','pushbutton',...
                 
                 
             end
-                
+            
             
             
             delete(f_sub);
@@ -929,7 +935,10 @@ pushIt = uicontrol('style','pushbutton',...
         
         f_sub = figure('units','normalized',...
             'position',[0.4 0.4 0.2 .3],...
-            'color','w');
+            'NumberTitle','off',...
+            'Name','Text setup',...
+            'color','w',...
+            'CloseRequestFcn',@saveProperties);
         
         handle_edit = uicontrol('style','edit',...
             'units','normalized',...
@@ -970,7 +979,10 @@ pushIt = uicontrol('style','pushbutton',...
         
         f_sub = figure('units','normalized',...
             'position',[0.4 0.4 0.2 .3],...
-            'color','w');
+            'NumberTitle','off',...
+            'Name','Edit setup',...
+            'color','w',...
+            'CloseRequestFcn',@saveProperties);
         
         handle_edit = uicontrol('style','edit',...
             'units','normalized',...
@@ -1024,8 +1036,25 @@ pushIt = uicontrol('style','pushbutton',...
         
         fid = fopen([path file],'A');
         
-        %% check the object type:
+        %cleanup the handle
         
+        obj.handle = strrep(obj.handle,' ','_');
+        obj.handle = strrep(obj.handle,'+','_');
+        obj.handle = strrep(obj.handle,'-','_');
+        obj.handle = strrep(obj.handle,'*','_');
+        obj.handle = strrep(obj.handle,'!','_');
+        obj.handle = strrep(obj.handle,'@','_');
+        obj.handle = strrep(obj.handle,'#','_');
+        obj.handle = strrep(obj.handle,'&','_');
+        obj.handle = strrep(obj.handle,'%','_');
+        obj.handle = strrep(obj.handle,'^','_');
+        obj.handle = strrep(obj.handle,'$','_');
+        
+        if ~isempty(str2num(obj.handle(1)))
+            obj.handle = ['handle_' obj.handle];
+        end
+        
+        %% check the object type:
         switch obj.style
             
             
@@ -1067,8 +1096,8 @@ pushIt = uicontrol('style','pushbutton',...
                     obj.frame.size.width,...
                     obj.frame.size.height);
                 fprintf(fid,'         ''backgroundcolor'',[%.4f %.4f %.4f]);\n\n\n',obj.color(1),...
-                                                                                obj.color(2),...
-                                                                                obj.color(3));
+                    obj.color(2),...
+                    obj.color(3));
                 
                 
                 
@@ -1082,19 +1111,19 @@ pushIt = uicontrol('style','pushbutton',...
                 fprintf(fid,'               ''Units'',''Normalized'',...\n');
                 
                 fprintf(fid,'               ''Position'',[%f %f %f %f],...\n',obj.frame.origin.X,...
-                                                                                obj.frame.origin.Y,...
-                                                                                obj.frame.size.width,...
-                                                                                obj.frame.size.height);
+                    obj.frame.origin.Y,...
+                    obj.frame.size.width,...
+                    obj.frame.size.height);
                 fprintf(fid,'               ''string'',''%s'',...\n',obj.string);
                 
                 fprintf(fid,'               ''backgroundcolor'',[%.4f %.4f %.4f],...\n',obj.color(1),...
-                                                                                obj.color(2),...
-                                                                                obj.color(3));
+                    obj.color(2),...
+                    obj.color(3));
                 
                 if isempty(obj.fnc)
                     callbacks = callbacks +1;
                     fprintf(fid,'               ''CallBack'',@MyCallback_%d);\n',callbacks);
-                    fprintf(fid,'\tfunction MyCallback_%d(Source,EventData)\n\n',callbacks);  
+                    fprintf(fid,'\tfunction MyCallback_%d(Source,EventData)\n\n',callbacks);
                 else
                     fprintf(fid,'               ''CallBack'',@%s);\n',obj.fnc);
                     fprintf(fid,'\tfunction %s(Source,EventData)\n\n',obj.fnc);
@@ -1114,14 +1143,14 @@ pushIt = uicontrol('style','pushbutton',...
                 fprintf(fid,'               ''Units'',''Normalized'',...\n');
                 
                 fprintf(fid,'               ''Position'',[%f %f %f %f],...\n',obj.frame.origin.X,...
-                                                                                obj.frame.origin.Y,...
-                                                                                obj.frame.size.width,...
-                                                                                obj.frame.size.height);
+                    obj.frame.origin.Y,...
+                    obj.frame.size.width,...
+                    obj.frame.size.height);
                 
                 fprintf(fid,'               ''max'',[%.2f],...\n',obj.max);
                 fprintf(fid,'               ''min'',[%.2f],...\n',obj.min);
                 fprintf(fid,'               ''value'',[%.2f]);\n\n\n',obj.value);
-                    
+                
                 
             case 'text' %OK
                 if isempty(obj.handle)
@@ -1132,9 +1161,9 @@ pushIt = uicontrol('style','pushbutton',...
                 fprintf(fid,'               ''Units'',''Normalized'',...\n');
                 
                 fprintf(fid,'               ''Position'',[%f %f %f %f],...\n',obj.frame.origin.X,...
-                                                                                obj.frame.origin.Y,...
-                                                                                obj.frame.size.width,...
-                                                                                obj.frame.size.height);
+                    obj.frame.origin.Y,...
+                    obj.frame.size.width,...
+                    obj.frame.size.height);
                 fprintf(fid,'               ''string'',''%s'');\n\n\n',obj.string);
                 
             case 'edit'%OK
@@ -1146,16 +1175,16 @@ pushIt = uicontrol('style','pushbutton',...
                 fprintf(fid,'               ''Units'',''Normalized'',...\n');
                 
                 fprintf(fid,'               ''Position'',[%f %f %f %f],...\n',obj.frame.origin.X,...
-                                                                                obj.frame.origin.Y,...
-                                                                                obj.frame.size.width,...
-                                                                                obj.frame.size.height);
+                    obj.frame.origin.Y,...
+                    obj.frame.size.width,...
+                    obj.frame.size.height);
                 fprintf(fid,'               ''string'',''%s'',...\n',obj.string);
                 
                 
                 if isempty(obj.fnc)
                     callbacks = callbacks +1;
                     fprintf(fid,'               ''CallBack'',@MyCallback_%d);\n',callbacks);
-                    fprintf(fid,'\tfunction MyCallback_%d(Source,EventData)\n\n',callbacks);  
+                    fprintf(fid,'\tfunction MyCallback_%d(Source,EventData)\n\n',callbacks);
                 else
                     fprintf(fid,'               ''CallBack'',@%s);\n',obj.fnc);
                     fprintf(fid,'\tfunction %s(Source,EventData)\n\n',obj.fnc);
@@ -1172,9 +1201,9 @@ pushIt = uicontrol('style','pushbutton',...
                 end
                 fprintf(fid,'                   ''Units'',''Normalized'',...\n');
                 fprintf(fid,'                   ''Position'',[%f %f %f %f],...\n',obj.frame.origin.X,...
-                                                                                obj.frame.origin.Y,...
-                                                                                obj.frame.size.width,...
-                                                                                obj.frame.size.height);
+                    obj.frame.origin.Y,...
+                    obj.frame.size.width,...
+                    obj.frame.size.height);
                 
                 fprintf(fid,'                   ''string'',{')
                 for i = 1:length(obj.string)-1
@@ -1190,14 +1219,14 @@ pushIt = uicontrol('style','pushbutton',...
         end
         
         fclose(fid)
-                
+        
         clear object;
         clear obj;
-                
-                
-                
-                
-                
+        
+        
+        
+        
+        
     end   %OK
 
     function closeMe(~,~)
@@ -1208,6 +1237,6 @@ pushIt = uicontrol('style','pushbutton',...
         fclose(fid);
         delete(f_main);
     end      %OK
-        
-   
+
+
 end
