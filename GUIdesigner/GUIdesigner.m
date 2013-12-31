@@ -109,13 +109,60 @@ f_main = figure('Color', [1 1 1],...
 %% Drawing area:
 DrawPanel = uipanel('background',[0.98 0.98 0.98],...
     'units','normalized',...
-    'position',[0 0 .85 1]);
+    'position',[0.05 0.05 .7 .8]);
 
 DrawAxes = axes('parent',DrawPanel,...
     'units','normalized',...
     'position',[0 0 1 1],...
     'xlim',[0 100],...
     'ylim',[0 100]);
+
+
+
+%% Canvas callbacks:
+
+mY = uicontrol('Style','Slider',...
+               'Units','Normalized',...
+               'Position',[-0.01 0.036 0.05 0.9],...
+               'max',[0.9],...
+               'min',[0.0001],...
+               'value',[0.8],...
+               'callback',@resizeY);
+
+
+mX = uicontrol('Style','Slider',...
+               'Units','Normalized',...
+               'Position',[0.05 0.0 0.8 0.05],...
+               'max',[0.8],...
+               'min',[0.0001],...
+               'value',[0.7],...
+               'callback',@resizeX);
+
+
+    function resizeX(~,~)
+        
+        pos_vec = get(DrawPanel,'position');
+        size = get(mX,'value');
+        
+        pos_vec(3) = size; 
+        
+        set(DrawPanel,'position',pos_vec);
+        
+    end
+
+    function resizeY(~,~)
+        
+        pos_vec = get(DrawPanel,'position');
+        size = get(mY,'value');
+        
+        pos_vec(4) = size; 
+        
+        set(DrawPanel,'position',pos_vec);
+        
+        
+    end
+
+
 
 %% Functionality:
 
@@ -1037,23 +1084,24 @@ menu_new = uicontrol('style','pushbutton',...
         fid = fopen([path file],'A');
         
         %cleanup the handle
-        
-        obj.handle = strrep(obj.handle,' ','_');
-        obj.handle = strrep(obj.handle,'+','_');
-        obj.handle = strrep(obj.handle,'-','_');
-        obj.handle = strrep(obj.handle,'*','_');
-        obj.handle = strrep(obj.handle,'!','_');
-        obj.handle = strrep(obj.handle,'@','_');
-        obj.handle = strrep(obj.handle,'#','_');
-        obj.handle = strrep(obj.handle,'&','_');
-        obj.handle = strrep(obj.handle,'%','_');
-        obj.handle = strrep(obj.handle,'^','_');
-        obj.handle = strrep(obj.handle,'$','_');
-        
-        if ~isempty(str2num(obj.handle(1)))
-            obj.handle = ['handle_' obj.handle];
+        if ~isempty(obj.handle)
+            
+            obj.handle = strrep(obj.handle,' ','_');
+            obj.handle = strrep(obj.handle,'+','_');
+            obj.handle = strrep(obj.handle,'-','_');
+            obj.handle = strrep(obj.handle,'*','_');
+            obj.handle = strrep(obj.handle,'!','_');
+            obj.handle = strrep(obj.handle,'@','_');
+            obj.handle = strrep(obj.handle,'#','_');
+            obj.handle = strrep(obj.handle,'&','_');
+            obj.handle = strrep(obj.handle,'%','_');
+            obj.handle = strrep(obj.handle,'^','_');
+            obj.handle = strrep(obj.handle,'$','_');
+
+            if ~isempty(str2num(obj.handle(1)))
+                obj.handle = ['handle_' obj.handle];
+            end
         end
-        
         %% check the object type:
         switch obj.style
             
@@ -1104,7 +1152,7 @@ menu_new = uicontrol('style','pushbutton',...
                 
             case 'pushbutton'%%OK
                 if isempty(obj.handle)
-                    fprintf(fid,'t = uicontrol(''Style'',''PushButton'',...\n');
+                    fprintf(fid,'p = uicontrol(''Style'',''PushButton'',...\n');
                 else
                     fprintf(fid,'%s = uicontrol(''Style'',''PushButton'',...\n',obj.handle);
                 end
@@ -1135,7 +1183,7 @@ menu_new = uicontrol('style','pushbutton',...
                 
             case 'slider' %OK
                 if isempty(obj.handle)
-                    fprintf(fid,'m = uicontrol(''Style'',''Slider'',...\n');
+                    fprintf(fid,'s = uicontrol(''Style'',''Slider'',...\n');
                 else
                     fprintf(fid,'%s = uicontrol(''Style'',''Slider'',...\n',obj.handle);
                 end
