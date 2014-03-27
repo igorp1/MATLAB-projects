@@ -40,6 +40,9 @@ side supported by the roller.
 
 Short URL http://goo.gl/TSNsxE
 
+Happy to announce that a new version develop by Carlton Duffet is avaible on GitHub!
+Check it out: https://github.com/cjduffett/Farny-Simulator 
+
 ======================================================
 
 Developed by:
