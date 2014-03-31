@@ -1,90 +1,14 @@
-%EK301, Section A1, Group 1, 05-Dec-2013
+%EK301, Section A1, Group 1, 28-Mar-2014
 \% Puneet Jhaveri.....ID U-22333827
 \% Mike Lipschitz.....ID U-73582249
 \% Igor dePaula.......ID U-42055545
 \% Luke Sakakeeny.....ID U-58113705
-\% DATE: 05-Dec-2013
+\% DATE: 28-Mar-2014
 
-m1: 13.846 (C)
-m2: 8.849 (T)
-m3: 8.839 (T)
-m4: 11.458 (C)
-m5: 10.712 (C)
-m6: 17.768 (T)
-m7: 7.694 (T)
-m8: 18.473 (C)
-m9: 9.348 (C)
-m10: 23.562 (T)
-m11: 21.300 (T)
-m12: 23.562 (T)
-m13: 9.348 (C)
-m14: 18.473 (C)
-m15: 7.694 (T)
-m16: 17.768 (T)
-m17: 10.712 (C)
-m18: 11.458 (C)
-m19: 8.839 (T)
-m20: 13.846 (C)
-m21: 8.849 (T)
-m22: 0.000 (C)
-m23: 10.650 (T)
-m24: 10.650 (T)
-Reaction forces in Newtons: 
-Sx1: -0.00
-Sy1: 10.65
-Sy2: 10.65
-Cost of Truss: $328.54
-Theoretical load/cost ratio in N/$: 0.0648
-Member 9 will be the first one to break
-Member 13 will be the first one to break
-Length of member is: 13.75
-Length of member is: 13.75
-The predicted buckling strength is 9.35
-The predicted buckling strength is 9.35
-The buckling strength uncertainty is 0.48
-The buckling strength uncertainty is 0.48
-The maximum load of the truss is 21.30
-The maximum load uncertainty is 1.10
-The maximum load uncertainty is 1.10
-m1: 1e+01
-m2: 9e+00
-m3: 8e+00
-m4: 1e+01
-m5: 1e+01
-m6: 8e+00
-m7: 1e+01
-m8: 9e+00
-m9: 1e+01
-m10: 8e+00
-m11: 1e+01
-m12: 8e+00
-m13: 1e+01
-m14: 9e+00
-m15: 1e+01
-m16: 8e+00
-m17: 1e+01
-m18: 1e+01
-m19: 8e+00
-m20: 1e+01
-m21: 9e+00
-1e+01
-9e+00
-8e+00
-1e+01
-1e+01
-8e+00
-1e+01
-9e+00
-1e+01
-8e+00
-1e+01
-8e+00
-1e+01
-9e+00
-1e+01
-8e+00
-1e+01
-1e+01
-8e+00
-1e+01
-9e+00
+m1: NaN (-)
+m2: NaN (-)
+m3: NaN (-)
+m4: NaN (-)
+m5: NaN (-)
+m6: NaN (-)
+m7: NaN (-)

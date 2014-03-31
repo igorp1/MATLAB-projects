@@ -829,17 +829,17 @@ menu_new = uicontrol('style','pushbutton',...
             G = str2num(get(g_edit,'string'))/255;
             B = str2num(get(b_edit,'string'))/255;
             
-            if isempty(R) || R>255
+            if isempty(R) || R > 1
                 set(r_edit,'string','0');
                 R=0;
             end
             
-            if isempty(G) || G>255
+            if isempty(G) || G > 1
                 set(g_edit,'string','0');
                 G=0;
             end
             
-            if isempty(B) || B>255
+            if isempty(B) || B > 1
                 set(b_edit,'string','0');
                 B=0;
             end
@@ -859,15 +859,15 @@ menu_new = uicontrol('style','pushbutton',...
             G = str2num(get(g_edit,'string'))/255;
             B = str2num(get(b_edit,'string'))/255;
             
-            if isempty(R) || R>255
+            if isempty(R) || R>1
                 R=0;
             end
             
-            if isempty(G) || G>255
+            if isempty(G) || G>1
                 G=0;
             end
             
-            if isempty(B) || B>255
+            if isempty(B) || B>1
                 B=0;
             end
             
@@ -1279,9 +1279,9 @@ menu_new = uicontrol('style','pushbutton',...
 
     function closeMe(~,~)
         
-        fid = fopen(file,'A');
+        fid = fopen([path file],'A');
         fprintf(fid,'\n\n\nend\n\n\n\n\n\n\n\n\n\n');
-        fprintf(fid,'%%\tThis GUI was powered by the GUIDesigner v 1.0\n');
+        fprintf(fid,'%%\tThis GUI was powered by the GUIDesigner v 1.3\n');
         fclose(fid);
         delete(f_main);
     end      %OK
